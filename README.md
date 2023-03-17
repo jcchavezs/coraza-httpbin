@@ -11,6 +11,6 @@ go run github.com/jcchavezs/coraza-httpbin/cmd/coraza-httpbin@latest
 And do a call in another terminal:
 
 ```shell
-# attemp XSS injection
+# attempt XSS injection
 curl -i "localhost:8080?arg=<script>a</script>"
 ```
