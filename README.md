@@ -4,11 +4,14 @@
 
 ## Getting started
 
+First you need to run the server using a directives file. Notice `@owasp_crs` folder
+is already included.
+
 ```shell
-go run github.com/jcchavezs/coraza-httpbin/cmd/coraza-httpbin@latest
+go run github.com/jcchavezs/coraza-httpbin/cmd/coraza-httpbin@latest -directives ./directives.conf.example
 ```
 
-And do a call in another terminal:
+and do a HTTP call in another terminal:
 
 ```shell
 # attempt XSS injection
