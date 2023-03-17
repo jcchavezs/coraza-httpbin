@@ -1,0 +1,5 @@
+SecRuleEngine On
+SecDebugLog /dev/stdout
+SecDebugLogLevel 1
+Include @crs-setup.conf.example
+Include @owasp_crs/*.conf
