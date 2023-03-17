@@ -39,7 +39,7 @@ func Lint() error {
 		return err
 	}
 
-	if sh.Run("git", "diff", "--exit-code", "go.mod", "go.sum", "go.work", "go.work.sum") != nil {
+	if sh.Run("git", "diff", "--exit-code", "go.mod", "go.sum") != nil {
 		return errRunGoModTidy
 	}
 
