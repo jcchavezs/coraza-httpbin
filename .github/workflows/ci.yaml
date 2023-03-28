@@ -45,7 +45,7 @@ jobs:
         run: go run mage.go lint
 
       - name: Build
-        run: go run mage.go buildForDocker
+        run: go run mage.go buildForDockerImage
 
       - name: Log in to the Container registry
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
