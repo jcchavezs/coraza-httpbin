@@ -58,12 +58,20 @@ func Build() error {
 	return build("", "")
 }
 
-func BuildDockerImage() error {
+func BuildForDockerImage() error {
 	if err := build("linux", "amd64"); err != nil {
 		return err
 	}
 
 	if err := build("linux", "arm64"); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func PackageDockerImage() error {
+	if err := BuildForDockerImage(); err != nil {
 		return err
 	}
 
