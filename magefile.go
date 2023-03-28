@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/magefile/mage/mg"
 	"github.com/magefile/mage/sh"
 )
 
@@ -34,7 +33,7 @@ func Lint() error {
 	return nil
 }
 
-func build(goos string) error {
+func build(goos string, goarch string) error {
 	if err := os.MkdirAll("build", 0755); err != nil {
 		return err
 	}
@@ -42,8 +41,13 @@ func build(goos string) error {
 	suffix := ""
 	env := map[string]string{}
 	if goos != "" {
-		suffix = "-" + goos
+		suffix += "-" + goos
 		env["GOOS"] = goos
+	}
+
+	if goarch != "" {
+		suffix += "-" + goarch
+		env["GOARCH"] = goarch
 	}
 
 	return sh.RunWithV(env, "go", "build", "-o", "build/coraza-httpbin"+suffix, "cmd/coraza-httpbin/main.go")
@@ -51,17 +55,21 @@ func build(goos string) error {
 
 // Build builds the project
 func Build() error {
-	return build("")
+	return build("", "")
 }
 
-func BuildLinux() error {
-	return build("linux")
-}
-
-func BuildDockerImage() {
-	mg.Deps(BuildLinux)
-
-	if err := sh.RunV("docker", "build", "-t", "ghcr.io/jcchavezs/coraza-httpbin", "."); err != nil {
-		return
+func BuildDockerImage() error {
+	if err := build("linux", "amd64"); err != nil {
+		return err
 	}
+
+	if err := build("linux", "arm64"); err != nil {
+		return err
+	}
+
+	if err := sh.RunV("docker", "buildx", "build", "-t", "ghcr.io/jcchavezs/coraza-httpbin", "--platform=linux/arm64,linux/amd64", "."); err != nil {
+		return err
+	}
+
+	return nil
 }
