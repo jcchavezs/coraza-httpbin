@@ -1,6 +1,9 @@
 FROM scratch
 
-COPY build/coraza-httpbin-linux /usr/bin/coraza-httpbin
+ARG TARGETOS
+ARG TARGETARCH
+
+COPY /build/coraza-httpbin-${TARGETOS}-${TARGETARCH} /usr/bin/coraza-httpbin
 
 EXPOSE 8080
 
