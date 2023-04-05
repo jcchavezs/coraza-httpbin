@@ -10,6 +10,8 @@ github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSs
 github.com/foxcpp/go-mockdns v1.0.0 h1:7jBqxd3WDWwi/6WhDvacvH1XsN3rOLXyHM1uhvIx6FI=
 github.com/jcchavezs/mergefs v0.0.0-20230405082700-7419041088d5 h1:0Mww6BSTtT8WVA5C4UdJ18RrQbnB+tBkjeZhNTo5Icw=
 github.com/jcchavezs/mergefs v0.0.0-20230405082700-7419041088d5/go.mod h1:BGD4X4tm4ZCbtShoISaG4Ama2L3NOq7y6cvuOxbYgzs=
+github.com/jcchavezs/mergefs v0.0.0-20230405222254-20429875efdd h1:wj0PapN9ZM27EnZqqtvVHUpRUWDHEK3/H7gkBFj1qyw=
+github.com/jcchavezs/mergefs v0.0.0-20230405222254-20429875efdd/go.mod h1:BGD4X4tm4ZCbtShoISaG4Ama2L3NOq7y6cvuOxbYgzs=
 github.com/magefile/mage v1.14.0 h1:6QDX3g6z1YvJ4olPhT1wksUcSa/V0a1B+pJb73fBjyo=
 github.com/magefile/mage v1.14.0/go.mod h1:z5UZb/iS3GoOSn0JgWuiw7dxlurVYTu+/jHXqQg881A=
 github.com/mccutchen/go-httpbin/v2 v2.6.0 h1:oxUgTD7/7+WB1T2GRsGwWJin9oNvwfEEK0vJBDVSCAk=

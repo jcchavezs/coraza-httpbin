@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/corazawaf/coraza-coreruleset v0.0.0-20230405190458-b4d2a6f6bdfc
 	github.com/corazawaf/coraza/v3 v3.0.0-20230317074144-c134cac34f59
-	github.com/jcchavezs/mergefs v0.0.0-20230405082700-7419041088d5
+	github.com/jcchavezs/mergefs v0.0.0-20230405222254-20429875efdd
 	github.com/magefile/mage v1.14.0
 	github.com/mccutchen/go-httpbin/v2 v2.6.0
 )
