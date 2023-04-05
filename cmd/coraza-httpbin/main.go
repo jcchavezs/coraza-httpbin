@@ -9,12 +9,12 @@ import (
 	"strconv"
 
 	coreruleset "github.com/corazawaf/coraza-coreruleset"
-	"github.com/corazawaf/coraza-coreruleset/io"
 	"github.com/corazawaf/coraza/v3"
 	corazahttp "github.com/corazawaf/coraza/v3/http"
 	"github.com/corazawaf/coraza/v3/types"
+	"github.com/jcchavezs/mergefs"
+	"github.com/jcchavezs/mergefs/io"
 	"github.com/mccutchen/go-httpbin/v2/httpbin"
-	"github.com/yalue/merged_fs"
 )
 
 var (
@@ -57,7 +57,7 @@ func main() {
 	app := httpbin.New()
 
 	wafConfig := coraza.NewWAFConfig().
-		WithRootFS(merged_fs.NewMergedFS(coreruleset.FS, io.OSFS)).
+		WithRootFS(mergefs.Merge(coreruleset.FS, io.OSFS)).
 		WithErrorCallback(logError)
 
 	if directivesFile != "" {
@@ -73,7 +73,6 @@ func main() {
 	http.Handle("/", corazahttp.WrapHandler(waf, app.Handler()))
 
 	// listen to port
-
 	log.Printf("Listening on port %d", port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), nil))
 }
