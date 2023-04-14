@@ -22,15 +22,6 @@ var (
 	directivesFile string
 )
 
-func init() {
-	// set a and b as flag int vars
-	flag.IntVar(&port, "port", getEnvInt("PORT", 8080), "Port to listen on")
-	flag.StringVar(&directivesFile, "directives", getEnvString("DIRECTIVES_FILE", ""), "Directives file to use")
-
-	// parse flags from command line
-	flag.Parse()
-}
-
 func logError(error types.MatchedRule) {
 	msg := error.ErrorLog(0)
 	fmt.Printf("[%s] %s", error.Rule().Severity(), msg)
@@ -53,9 +44,7 @@ func getEnvString(name string, defaultValue string) string {
 	return defaultValue
 }
 
-func main() {
-	app := httpbin.New()
-
+func createWAF(directivesFile string) (coraza.WAF, error) {
 	wafConfig := coraza.NewWAFConfig().
 		WithRootFS(mergefs.Merge(coreruleset.FS, io.OSFS)).
 		WithErrorCallback(logError)
@@ -66,8 +55,26 @@ func main() {
 
 	waf, err := coraza.NewWAF(wafConfig)
 	if err != nil {
+		return nil, err
+	}
+
+	return waf, nil
+}
+
+func main() {
+	// set a and b as flag int vars
+	flag.IntVar(&port, "port", getEnvInt("PORT", 8080), "Port to listen on")
+	flag.StringVar(&directivesFile, "directives", getEnvString("DIRECTIVES_FILE", ""), "Directives file to use")
+
+	// parse flags from command line
+	flag.Parse()
+
+	waf, err := createWAF(directivesFile)
+	if err != nil {
 		log.Fatal(err)
 	}
+
+	app := httpbin.New()
 
 	// handle route using handler function
 	http.Handle("/", corazahttp.WrapHandler(waf, app.Handler()))

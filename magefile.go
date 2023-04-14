@@ -33,6 +33,10 @@ func Lint() error {
 	return nil
 }
 
+func Test() error {
+	return sh.RunV("go", "test", "-v", "./...")
+}
+
 func build(goos string, goarch string) error {
 	if err := os.MkdirAll("build", 0755); err != nil {
 		return err
