@@ -74,7 +74,7 @@ func BuildForDockerImage() error {
 	return nil
 }
 
-func PackageDockerImage() error {
+func PackDockerImage() error {
 	if err := BuildForDockerImage(); err != nil {
 		return err
 	}
