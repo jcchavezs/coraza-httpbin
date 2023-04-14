@@ -74,12 +74,26 @@ func BuildForDockerImage() error {
 	return nil
 }
 
+const dockerImage = "ghcr.io/jcchavezs/coraza-httpbin"
+
 func PackDockerImage() error {
 	if err := BuildForDockerImage(); err != nil {
 		return err
 	}
 
-	if err := sh.RunV("docker", "buildx", "build", "-t", "ghcr.io/jcchavezs/coraza-httpbin", "--platform=linux/arm64,linux/amd64", "."); err != nil {
+	if err := sh.RunV("docker", "buildx", "build", "-t", dockerImage, "--platform=linux/arm64,linux/amd64,darwin/amd64", "."); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func PackLocalDockerImage() error {
+	if err := BuildForDockerImage(); err != nil {
+		return err
+	}
+
+	if err := sh.RunWithV(map[string]string{"DOCKER_BUILDKIT": "1"}, "docker", "buildx", "build", "-t", dockerImage, "--load", "."); err != nil {
 		return err
 	}
 

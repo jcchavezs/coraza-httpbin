@@ -62,7 +62,6 @@ func createWAF(directivesFile string) (coraza.WAF, error) {
 }
 
 func main() {
-	// set a and b as flag int vars
 	flag.IntVar(&port, "port", getEnvInt("PORT", 8080), "Port to listen on")
 	flag.StringVar(&directivesFile, "directives", getEnvString("DIRECTIVES_FILE", ""), "Directives file to use")
 
