@@ -36,7 +36,7 @@ Include /path-to-my-rules/*.conf
 docker run -v /path-to-rules:/etc/my-rules ghcr.io/jcchavezs/coraza-httpbin:main
 ```
 
-and change your directives file to point to the new rules locations, for example in the `directives.conf.example`:
+and change your directives file to point to the new rules locations, for example in the `directives.conf`:
 
 ```seclang
 SecRuleEngine On
@@ -47,5 +47,9 @@ Include /etc/my-rules/*.conf
 ```
 
 ```shell
-docker run -v /path-to-rules:/etc/my-rules ghcr.io/jcchavezs/coraza-httpbin:main -directives /path-to-directives-file.conf
+docker run \
+    -v /path-to-rules:/etc/my-rules \
+    -v $(pwd):/path-to-directives-file \
+    ghcr.io/jcchavezs/coraza-httpbin:main \
+    -directives /path-to-directives-file/directives.conf
 ```
