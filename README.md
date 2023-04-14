@@ -45,3 +45,7 @@ SecDebugLogLevel 1
 Include /etc/my-rules/crs-setup.conf.example
 Include /etc/my-rules/*.conf
 ```
+
+```shell
+docker run -v /path-to-rules:/etc/my-rules ghcr.io/jcchavezs/coraza-httpbin:main -directives /path-to-directives-file.conf
+```

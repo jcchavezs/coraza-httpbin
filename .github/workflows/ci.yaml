@@ -44,6 +44,9 @@ jobs:
       - name: Lint
         run: go run mage.go lint
 
+      - name: Test
+        run: go run mage.go test
+
       - name: Build
         run: go run mage.go buildForDockerImage
 
