@@ -1,5 +1,6 @@
 SecRuleEngine On
 SecDebugLog /dev/stdout
 SecDebugLogLevel 1
+Include @coraza.conf-recommended
 Include @crs-setup.conf.example
 Include @owasp_crs/*.conf

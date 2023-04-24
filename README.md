@@ -6,8 +6,7 @@
 
 ### Running in Go
 
-First you need to run the server using a directives file. Notice `@owasp_crs` folder
-is already included.
+First you need to run the server using a directives file.
 
 ```shell
 go run github.com/jcchavezs/coraza-httpbin/cmd/coraza-httpbin@latest -directives ./directives.conf.example
@@ -20,12 +19,15 @@ and do a HTTP call in another terminal:
 curl -i "localhost:8080?arg=<script>a</script>"
 ```
 
+**Important:** Notice `@owasp_crs` folder is already included and can be used as described [here](https://github.com/corazawaf/coraza-coreruleset).
+
 You can also point to rules in your filesystem by using the absolute notation in the directives file:
 
 ```seclang
 SecRuleEngine On
 SecDebugLog /dev/stdout
 SecDebugLogLevel 1
+Include /path-to-my-rules/coraza.conf-recommended
 Include /path-to-my-rules/crs-setup.conf.example
 Include /path-to-my-rules/*.conf
 ```
@@ -42,6 +44,7 @@ and change your directives file to point to the new rules locations, for example
 SecRuleEngine On
 SecDebugLog /dev/stdout
 SecDebugLogLevel 1
+Include /etc/my-rules/coraza.conf-recommended
 Include /etc/my-rules/crs-setup.conf.example
 Include /etc/my-rules/*.conf
 ```
