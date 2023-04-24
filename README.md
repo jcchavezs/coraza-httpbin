@@ -6,7 +6,7 @@
 
 ### Running in Go
 
-First you need to run the server using a directives file.
+First you need to run the server using a directives file:
 
 ```shell
 go run github.com/jcchavezs/coraza-httpbin/cmd/coraza-httpbin@latest -directives ./directives.conf.example
