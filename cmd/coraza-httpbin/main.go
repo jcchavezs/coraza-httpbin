@@ -23,7 +23,7 @@ var (
 )
 
 func logError(error types.MatchedRule) {
-	msg := error.ErrorLog(0)
+	msg := error.ErrorLog()
 	fmt.Printf("[%s] %s", error.Rule().Severity(), msg)
 }
 
