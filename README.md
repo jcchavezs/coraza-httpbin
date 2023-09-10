@@ -56,3 +56,13 @@ docker run \
     ghcr.io/jcchavezs/coraza-httpbin:main \
     -directives /path-to-directives-file/directives.conf
 ```
+
+### Logging
+
+By default, coraza-httpbin will log Coraza messages to stdout. You can specify a log file by using the `-log-file` flag:
+
+```shell
+go run github.com/jcchavezs/coraza-httpbin/cmd/coraza-httpbin@latest \
+  -directives ./directives.conf.example \
+  -log-file coraza_log.log
+```

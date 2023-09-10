@@ -19,6 +19,7 @@ import (
 
 var (
 	port           int
+	logFile        string
 	directivesFile string
 )
 
@@ -61,12 +62,23 @@ func createWAF(directivesFile string) (coraza.WAF, error) {
 	return waf, nil
 }
 
+func configureLog() {
+	file, err := os.OpenFile(logFile, os.O_CREATE|os.O_RDWR, os.ModePerm)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	os.Stdout = file
+}
+
 func main() {
 	flag.IntVar(&port, "port", getEnvInt("PORT", 8080), "Port to listen on")
+	flag.StringVar(&logFile, "log-file", getEnvString("LOG_FILE", "/dev/stdout"), "File to log to")
 	flag.StringVar(&directivesFile, "directives", getEnvString("DIRECTIVES_FILE", ""), "Directives file to use")
 
 	// parse flags from command line
 	flag.Parse()
+	configureLog()
 
 	waf, err := createWAF(directivesFile)
 	if err != nil {
