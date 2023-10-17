@@ -59,10 +59,16 @@ docker run \
 
 ### Logging
 
-By default, coraza-httpbin will log Coraza messages to stdout. You can specify a log file by using the `-log-file` flag:
+By default, coraza-httpbin will log Coraza messages to stdout. You can specify a log file by using the `-matched-rules-log` flag:
 
 ```shell
 go run github.com/jcchavezs/coraza-httpbin/cmd/coraza-httpbin@latest \
   -directives ./directives.conf.example \
-  -log-file coraza_log.log
+  -matched-rules-log coraza_log.log
+```
+
+and get logs:
+
+```
+[critical] [client "127.0.0.1"] Coraza: Warning. XSS Attack Detected via libinjection [file "../coraza-httpbin/@owasp_crs/REQUEST-941-APPLICATION-ATTACK-XSS.conf"] [line "4434"] [id "941100"] [rev ""] [msg "XSS Attack Detected via libinjection"] [data "Matched Data: XSS data found within ARGS:arg: <script>a</script>"] [severity "critical"] [ver "OWASP_CRS/4.0.0-rc1"] [maturity "0"] [accuracy "0"] [tag "application-multi"] [tag "language-multi"] [tag "platform-multi"] [tag "attack-xss"] [tag "paranoia-level/1"] [tag "OWASP_CRS"] [tag "capec/1000/152/242"] [hostname ""] [uri "/?arg=<script>a</script>"] [unique_id "GRdXJCfkPuFbQwyLXlF"]
 ```
