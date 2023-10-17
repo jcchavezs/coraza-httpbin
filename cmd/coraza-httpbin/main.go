@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	stdio "io"
 	"log"
 	"net/http"
 	"os"
@@ -17,15 +18,11 @@ import (
 	"github.com/mccutchen/go-httpbin/v2/httpbin"
 )
 
-var (
-	port           int
-	logFile        string
-	directivesFile string
-)
-
-func logError(error types.MatchedRule) {
-	msg := error.ErrorLog()
-	fmt.Printf("[%s] %s", error.Rule().Severity(), msg)
+func matchedRulesLogger(w stdio.Writer) func(error types.MatchedRule) {
+	return func(err types.MatchedRule) {
+		msg := err.ErrorLog()
+		fmt.Fprintf(w, "[%s] %s", err.Rule().Severity(), msg)
+	}
 }
 
 func getEnvInt(name string, defaultValue int) int {
@@ -45,10 +42,15 @@ func getEnvString(name string, defaultValue string) string {
 	return defaultValue
 }
 
-func createWAF(directivesFile string) (coraza.WAF, error) {
+func createWAF(directivesFile, matchedRulesLogDst string) (coraza.WAF, error) {
+	matchedRulesLogWriter, err := resolveWriter(matchedRulesLogDst)
+	if err != nil {
+		return nil, fmt.Errorf("resolving error log destination: %w", err)
+	}
+
 	wafConfig := coraza.NewWAFConfig().
 		WithRootFS(mergefs.Merge(coreruleset.FS, io.OSFS)).
-		WithErrorCallback(logError)
+		WithErrorCallback(matchedRulesLogger(matchedRulesLogWriter))
 
 	if directivesFile != "" {
 		wafConfig = wafConfig.WithDirectivesFromFile(directivesFile)
@@ -56,31 +58,32 @@ func createWAF(directivesFile string) (coraza.WAF, error) {
 
 	waf, err := coraza.NewWAF(wafConfig)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("creating WAF: %w", err)
 	}
 
 	return waf, nil
 }
 
-func configureLog() {
-	file, err := os.OpenFile(logFile, os.O_CREATE|os.O_RDWR, os.ModePerm)
-	if err != nil {
-		log.Fatal(err)
+func resolveWriter(errLogTarget string) (stdio.Writer, error) {
+	switch errLogTarget {
+	case "/dev/stdout", "":
+		return os.Stdout, nil
+	case "/dev/stderr":
+		return os.Stderr, nil
+	default:
+		return os.OpenFile(errLogTarget, os.O_CREATE|os.O_RDWR, os.ModePerm)
 	}
-
-	os.Stdout = file
 }
 
 func main() {
-	flag.IntVar(&port, "port", getEnvInt("PORT", 8080), "Port to listen on")
-	flag.StringVar(&logFile, "log-file", getEnvString("LOG_FILE", "/dev/stdout"), "File to log to")
-	flag.StringVar(&directivesFile, "directives", getEnvString("DIRECTIVES_FILE", ""), "Directives file to use")
+	port := flag.Int("port", getEnvInt("PORT", 8080), "Port to listen on")
+	matchedRulesLogDestination := flag.String("matched-rules-log", getEnvString("MATCHED_RULES_LOG", "/dev/stdout"), "Destination to log matched rules to")
+	directivesFile := flag.String("directives", getEnvString("DIRECTIVES_FILE", ""), "Directives file to use")
 
 	// parse flags from command line
 	flag.Parse()
-	configureLog()
 
-	waf, err := createWAF(directivesFile)
+	waf, err := createWAF(*directivesFile, *matchedRulesLogDestination)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -91,6 +94,6 @@ func main() {
 	http.Handle("/", corazahttp.WrapHandler(waf, app.Handler()))
 
 	// listen to port
-	log.Printf("Listening on port %d", port)
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), nil))
+	log.Printf("Listening on port %d", *port)
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", *port), nil))
 }
