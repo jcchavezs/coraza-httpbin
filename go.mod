@@ -3,9 +3,9 @@ module github.com/jcchavezs/coraza-httpbin
 go 1.19
 
 require (
-	github.com/corazawaf/coraza-coreruleset v0.0.0-20230405190458-b4d2a6f6bdfc
+	github.com/corazawaf/coraza-coreruleset v0.0.0-20231024214400-e0c6f83bca7a
 	github.com/corazawaf/coraza/v3 v3.0.4
-	github.com/jcchavezs/mergefs v0.0.0-20230405222254-20429875efdd
+	github.com/jcchavezs/mergefs v0.0.0-20230503083351-07f27d256761
 	github.com/magefile/mage v1.15.0
 	github.com/mccutchen/go-httpbin/v2 v2.9.1
 	github.com/stretchr/testify v1.8.2
