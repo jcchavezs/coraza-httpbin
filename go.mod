@@ -3,7 +3,7 @@ module github.com/jcchavezs/coraza-httpbin
 go 1.19
 
 require (
-	github.com/corazawaf/coraza-coreruleset v0.0.0-20231030141218-0911b8ad6a6a
+	github.com/corazawaf/coraza-coreruleset v0.0.0-20231103220038-fd5c847140a6
 	github.com/corazawaf/coraza/v3 v3.0.4
 	github.com/jcchavezs/mergefs v0.0.0-20230503083351-07f27d256761
 	github.com/magefile/mage v1.15.0
