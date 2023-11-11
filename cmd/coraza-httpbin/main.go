@@ -21,7 +21,7 @@ import (
 func matchedRulesLogger(w stdio.Writer) func(error types.MatchedRule) {
 	return func(err types.MatchedRule) {
 		msg := err.ErrorLog()
-		fmt.Fprintf(w, "[%s] %s", err.Rule().Severity(), msg)
+		fmt.Fprintf(w, "[%s] %s\n", err.Rule().Severity(), msg)
 	}
 }
 
@@ -71,7 +71,7 @@ func resolveWriter(errLogTarget string) (stdio.Writer, error) {
 	case "/dev/stderr":
 		return os.Stderr, nil
 	default:
-		return os.OpenFile(errLogTarget, os.O_CREATE|os.O_RDWR, os.ModePerm)
+		return os.OpenFile(errLogTarget, os.O_CREATE|os.O_RDWR|os.O_APPEND, os.ModePerm)
 	}
 }
 
